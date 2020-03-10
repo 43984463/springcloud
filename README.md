@@ -15,3 +15,11 @@ com.sherlock.springcloud.controller.OrderController.create(com.sherlock.springcl
 # 第二天记录
 在80端口的eureka订单服务，在com.sherlock.springcloud.controller.OrderController中当服务提供者为集群时使用localhost:8001用服务提供者的名称代替cloud-payment-service,
 并在 com.sherlock.springcloud.config.ApplicationContextConfig.restTemplate方法处开启@LoadBalanced负载均衡。
+Eureka客户端配置
+eureka.instance.instance-id  #Eureka客户端在eureka注册中心显示的名称
+eureka.instance.lease-renewal-interval-in-seconds #Eureka客户端向服务端发送心跳的时间间隔，单位为秒(默认30S)
+eureka.instance.lease-expiration-duration-in-seconds #Eureka服务端在收到最后一次心跳后等待的时间上限，单位为秒(默认90S)，超时则会删除服务
+
+Eureka服务端配置
+eureka.server.enable-self-preservation #Eureka是否开启自我保护机制
+eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务的时间，默认毫秒
