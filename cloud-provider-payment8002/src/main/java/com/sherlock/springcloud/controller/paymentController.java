@@ -82,4 +82,21 @@ public class paymentController {
         }
         return this.discoveryClient;
     }
+
+    @GetMapping("/payment/discovery2")
+    public Object discovery2() {
+        // 获取服务
+        List<String> services = discoveryClient.getServices();
+        if (services.size() > 0) {
+            services.stream()
+                    .forEach(service -> {
+                        log.info("service name is:" + service);
+                        discoveryClient.getInstances(service).stream()
+                                .forEach(instance -> {
+                                    log.info("instance info:" + instance.getHost() + " " + instance.getPort() + " " + instance.getInstanceId());
+                                });
+                    });
+        }
+        return this.discoveryClient;
+    }
 }

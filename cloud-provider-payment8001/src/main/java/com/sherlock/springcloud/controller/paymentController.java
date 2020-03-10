@@ -6,11 +6,15 @@ import com.sherlock.springcloud.service.paymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @auther Sherlock
@@ -26,6 +30,9 @@ public class paymentController {
 
     @Value("${server.port}")
     private String port;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     /**
      * 在执行远程调用时需要添加 @RequestBody 注解来传递对象
@@ -54,5 +61,37 @@ public class paymentController {
         } else {
             return new CommonResult(444, "查询payment失败在port:" + port, null);
         }
+    }
+
+    @GetMapping("/payment/discovery")
+    public Object discovery(){
+        // 获取服务
+        List<String> services = discoveryClient.getServices();
+        for (String service:services) {
+            log.info(service);
+        }
+
+        List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
+        for (ServiceInstance instance : instances) {
+            log.info(instance.getHost() + instance.getPort() + instance.getInstanceId());
+        }
+        return this.discoveryClient;
+    }
+
+    @GetMapping("/payment/discovery2")
+    public Object discovery2() {
+        // 获取服务
+        List<String> services = discoveryClient.getServices();
+        if (services.size() > 0) {
+            services.stream()
+                    .forEach(service -> {
+                        log.info("service name is:" + service);
+                        discoveryClient.getInstances(service).stream()
+                                .forEach(instance -> {
+                                    log.info("instance info:" + instance.getHost() + " " + instance.getPort() + " " + instance.getInstanceId());
+                                });
+                    });
+        }
+        return this.discoveryClient;
     }
 }
