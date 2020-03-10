@@ -1,0 +1,35 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: cloud-payment-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: org.gjt.mm.mysql.Driver
+    url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    druid:
+      validation-query: SELECT 1 FROM DUAL  #测试连接 不配置则控制台会打印一个ERROR LOG
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sherlock.springcloud.entities
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #可以使mybatis在控制台打印sql，并且使mybatis log plugin插件有效
+
+eureka:
+  client:
+    #向eureka注册中心注册
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      #eureka注册中心注册地址
+      #可以只写1个注册中心的地址只要写的那个激活然后写的那个注册中心与其他注册中心集群并互相注册，其他未再次填写的注册中心仍然可以访问到该服务
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    # 在eureka注册中心显示的名称
+    instance-id: payment8002
+    # 鼠标放在这个名称上时(参考eureka.instance.instance-id)左下角显示的内容是否显示真实IP作为前缀
+    prefer-ip-address: true
