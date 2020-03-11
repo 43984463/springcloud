@@ -25,8 +25,8 @@ eureka.server.enable-self-preservation #Eureka是否开启自我保护机制
 eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务的时间，默认毫秒
 
 # 第三天记录
-① cloud-consumer-feign-order80#com.sherlock.springcloud.controller.OrderController#getPayment
-② com.sherlock.springcloud.service.PaymentFeignService.getPaymentById
-③ com.sherlock.springcloud.FeignOrder80 开启openFeign @EnableFeignClients
-④ com.sherlock.springcloud.service.PaymentFeignService 使用@FeignClient(value = "cloud-provider-payment")指定调用注册中心中的服务
+① cloud-consumer-feign-order80#com.sherlock.springcloud.controller.OrderController#getPayment。
+② com.sherlock.springcloud.service.PaymentFeignService.getPaymentById。
+③ com.sherlock.springcloud.FeignOrder80 开启openFeign @EnableFeignClients。
+④ com.sherlock.springcloud.service.PaymentFeignService 使用@FeignClient(value = "cloud-provider-payment")指定调用注册中心中的服务。
  
