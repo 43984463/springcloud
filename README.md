@@ -28,4 +28,8 @@ eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务�
 ② com.sherlock.springcloud.service.PaymentFeignService.getPaymentById。 <br>
 ③ com.sherlock.springcloud.FeignOrder80 开启openFeign @EnableFeignClients。 <br>
 ④ com.sherlock.springcloud.service.PaymentFeignService 使用@FeignClient(value = "cloud-provider-payment")指定调用注册中心中的服务。 <br>
- 
+使用hystrix进行服务容错 <br>
+参考com.sherlock.springcloud.service.PaymentService.paymentInfo_TimeOut_OK或者 <br>
+com.sherlock.springcloud.controller.OrderController#paymentInfo_TimeOut_OK <br>
+hystrix 使用 <br>
+注解@HystrixCommand表示服务降级容错，既可以方法服务提供端，也可以放在服务调用端，一般配置在服务调用端，使用时请 ++ fallBack Method；<br>
