@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MyIRuleConfig {
 
+    /**
+     * 往spring容器中添加IRule来设置使用的负载均衡方式
+     * @return
+     */
     @Bean
     public IRule iRule(){
         return new RandomRule();
