@@ -71,7 +71,7 @@ public class paymentController {
             log.info(service);
         }
 
-        List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
+        List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PROVIDER-PAYMENT");
         for (ServiceInstance instance : instances) {
             log.info(instance.getHost() + instance.getPort() + instance.getInstanceId());
         }

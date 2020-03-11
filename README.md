@@ -13,7 +13,7 @@ com.sherlock.springcloud.controller.OrderController.create(com.sherlock.springcl
 测试连接,不配置则控制台会打印一个ERROR LOG.但是并不影响使用.
 
 # 第二天记录
-在80端口的eureka订单服务，在com.sherlock.springcloud.controller.OrderController中当服务提供者为集群时使用localhost:8001用服务提供者的名称代替cloud-payment-service,
+在80端口的eureka订单服务，在com.sherlock.springcloud.controller.OrderController中当服务提供者为集群时使用localhost:8001用服务提供者的名称代替cloud-provider-payment,
 并在 com.sherlock.springcloud.config.ApplicationContextConfig.restTemplate方法处开启@LoadBalanced负载均衡。
 Eureka客户端配置
 eureka.instance.instance-id  #Eureka客户端在eureka注册中心显示的名称
@@ -23,3 +23,10 @@ eureka.instance.lease-expiration-duration-in-seconds #Eureka服务端在收到�
 Eureka服务端配置
 eureka.server.enable-self-preservation #Eureka是否开启自我保护机制
 eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务的时间，默认毫秒
+
+# 第三天记录
+① cloud-consumer-feign-order80#com.sherlock.springcloud.controller.OrderController#getPayment
+② com.sherlock.springcloud.service.PaymentFeignService.getPaymentById
+③ com.sherlock.springcloud.FeignOrder80 开启openFeign @EnableFeignClients
+④ com.sherlock.springcloud.service.PaymentFeignService 使用@FeignClient(value = "cloud-provider-payment")指定调用注册中心中的服务
+ 
