@@ -83,7 +83,7 @@ public class PaymentService {
     }
 
     public String paymentCircuitBreaker_fallback(@PathVariable("id") Integer id) {
-        return "id 不能负数,请稍后重试,o(╥﹏╥)o id:" + id;
+        return Thread.currentThread().getName() + "\t" + "id 不能负数,请稍后重试,o(╥﹏╥)o id:" + id;
     }
 
 }
