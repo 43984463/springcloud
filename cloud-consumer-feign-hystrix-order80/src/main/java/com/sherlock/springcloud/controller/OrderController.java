@@ -1,5 +1,6 @@
 package com.sherlock.springcloud.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sherlock.springcloud.service.PaymentFeignHystrixService;
@@ -14,6 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  */
 @RestController
+/**
+ * 设置全局默认fallback方法
+ *
+ * ① 在类上添加注解 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler") 并配置默认的fallback方法
+ * ② 在需要进行服务降级的方法上添加 @HystrixCommand 注解（如果配置了属性则优先使用该属性里面的配置）
+ * ③ 添加在 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")注解中的PaymentInfo_TimeOut_Global_Handler方法来作为默认的fallback方法。
+ */
+@DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")
 public class OrderController {
 
     @Autowired
@@ -33,9 +42,10 @@ public class OrderController {
      * @param id
      * @return
      */
-    @HystrixCommand(fallbackMethod = "PaymentInfo_TimeOut_Handler", commandProperties = {
+    /*@HystrixCommand(fallbackMethod = "PaymentInfo_TimeOut_Handler", commandProperties = {
             @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value = "1500")
-    })
+    })*/
+    @HystrixCommand
     @GetMapping("/consumer/payment/hystrix/timeout/{id}")
     public String paymentInfo_TimeOut_OK(@PathVariable("id") Integer id){
         return paymentFeignHystrixService.paymentInfo_TimeOut_OK(id);
@@ -43,6 +53,10 @@ public class OrderController {
 
     public String PaymentInfo_TimeOut_Handler(Integer id){
         return "cloud-consumer-feign-hystrix-order80 的备用方法。";
+    }
+
+    public String PaymentInfo_TimeOut_Global_Handler(){
+        return "cloud-consumer-feign-hystrix-order80 的全局备用方法。";
     }
 
 }

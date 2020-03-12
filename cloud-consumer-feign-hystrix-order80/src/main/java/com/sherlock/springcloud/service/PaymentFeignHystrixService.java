@@ -1,7 +1,6 @@
 package com.sherlock.springcloud.service;
 
-import com.sherlock.springcloud.entities.CommonResult;
-import com.sherlock.springcloud.entities.Payment;
+import com.sherlock.springcloud.service.serviceimpl.PaymentFeignFallBackServiceImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @Description:
  */
 @Service
-@FeignClient(value = "cloud-provider-hystrix-payment")
+/**
+ * ①添加本接口的实现类并重写所以方法的fallback方法，并将其加入spring容器。
+ * ②在@FeignClient注解中配置fallback（默认的fallback class）
+ */
+@FeignClient(value = "cloud-provider-hystrix-payment", fallback = PaymentFeignFallBackServiceImpl.class)
 public interface PaymentFeignHystrixService {
 
     @GetMapping("/payment/hystrix/timeout/{id}")

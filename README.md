@@ -28,8 +28,33 @@ eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务�
 ② com.sherlock.springcloud.service.PaymentFeignService.getPaymentById。 <br>
 ③ com.sherlock.springcloud.FeignOrder80 开启openFeign @EnableFeignClients。 <br>
 ④ com.sherlock.springcloud.service.PaymentFeignService 使用@FeignClient(value = "cloud-provider-payment")指定调用注册中心中的服务。 <br>
-使用hystrix进行服务容错 <br>
+
+
+# 第四天记录
+## 使用hystrix进行服务容错
+### 一、 某个特定方法的服务容错
 参考com.sherlock.springcloud.service.PaymentService.paymentInfo_TimeOut_OK或者 <br>
 com.sherlock.springcloud.controller.OrderController#paymentInfo_TimeOut_OK <br>
 hystrix 使用 <br>
 注解@HystrixCommand表示服务降级容错，既可以方法服务提供端，也可以放在服务调用端，一般配置在服务调用端，使用时请 ++ fallBack Method；<br>
+### 二、 全局方法的服务容错
+① 在类上添加注解 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler") 并配置默认的fallback方法. <br>
+② 在需要进行服务降级的方法上添加 @HystrixCommand 注解(如果配置了属性则优先使用该属性里面的配置). <br>
+③ 添加在 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")注解中的PaymentInfo_TimeOut_Global_Handler方法来作为默认的fallback方法. <br>
+
+### 三、 在com.sherlock.springcloud.service.PaymentFeignHystrixService中添加实现类并在
+@FeignClient(value = "cloud-provider-hystrix-payment", fallback = PaymentFeignFallBackServiceImpl.class)注解中将其配置为fallback方法。 <br>
+需要将Impl假如到spring容器中(添加@Component注解)，此时出错则调用PaymentFeignFallBackServiceImpl中对应的方法。
+
+## 使用hystrix进行服务熔断
+@HystrixCommand(
+            fallbackMethod = "paymentCircuitBreaker_fallback",  //熔断之后的兜底方法 <br>
+            commandProperties = { <br>
+                @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),// 是否开启断路器 <br>
+                @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),// 请求次数 <br>
+                @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),// 时间窗口期/时间范围 <br>
+                @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")// 失败率达到多少后跳闸 <br>
+             } <br>
+    ) <br>
+此注解可以配置的属性参考com.netflix.hystrix.HystrixCommandProperties <br>
+
