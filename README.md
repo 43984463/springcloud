@@ -59,3 +59,18 @@ hystrix 使用 <br>
     ) <br>
 此注解可以配置的属性参考com.netflix.hystrix.HystrixCommandProperties <br>
 
+## 使用gateway进行网关(route,predicate,filter)
+### 使用application.yml配置文件配置
+cloud-gateway-gateway9527/src/main/resources/application.yml <br>
+
+网关之前的服务cloud-provider-payment8001 访问地址为http://localhost:8001/payment/get/1 <br>
+添加网关注册并配置路径等之后http://localhost:9527/payment/get/1 <br>
+### 使用注册bean的形式构建
+cloud-gateway-gateway9527 -> com.sherlock.springcloud.config.GatewayConfig 
+### 使用配置文件进行动态路由
+application.yml -> spring.cloud.gateway.discovery.locator.enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由 <br>
+spring.cloud.gateway.routes[0].uri: lb:CLOUD-PROVIDER-PAYMENT
+### 使用过滤器拦截请求
+使用实现了org.springframework.cloud.gateway.filter.GlobalFilter接口的组件 <br>
+重写org.springframework.cloud.gateway.filter.GlobalFilter.filter方法来拦截或者过滤请求。
+
