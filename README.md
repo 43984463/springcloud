@@ -42,7 +42,8 @@ hystrix 使用 <br>
 ② 在需要进行服务降级的方法上添加 @HystrixCommand 注解(如果配置了属性则优先使用该属性里面的配置). <br>
 ③ 添加在 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")注解中的PaymentInfo_TimeOut_Global_Handler方法来作为默认的fallback方法. <br>
 
-### 三、 在com.sherlock.springcloud.service.PaymentFeignHystrixService中添加实现类并在
+### 三、 在服务调用端的service实现里面的所有方法来实现容错
+在com.sherlock.springcloud.service.PaymentFeignHystrixService中添加实现类并在
 @FeignClient(value = "cloud-provider-hystrix-payment", fallback = PaymentFeignFallBackServiceImpl.class)注解中将其配置为fallback方法。 <br>
 需要将Impl假如到spring容器中(添加@Component注解)，此时出错则调用PaymentFeignFallBackServiceImpl中对应的方法。
 
