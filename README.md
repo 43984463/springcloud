@@ -84,25 +84,25 @@ cloud-config-center-3344 -> com.sherlock.springcloud.ConfigCenterMain3344
 配置文件名称为bootstrap.yml
 
 ### 3355通过3344读取github上对应路径，版本上的某个文件的信息
-spring: <br>
-  application: <br>
-    name: cloud-config-client <br>
-  cloud: <br>
-    config: <br>
-      #读取cloud-config-center-3344的分支 <br>
-      label: master <br>
-      #读取cloud-config-center-3344的文件名 <br>
-      name: config <br>
-      #读取cloud-config-center-3344的环境 <br>
-      profile: dev <br>
-      #读取cloud-config-center-3344的地址 <br>
-      uri: http://localhost:3344 <br>
-
+    spring: <br>
+        application: <br>
+                name: cloud-config-client <br>
+        cloud: <br>
+                config: <br>
+                    #读取cloud-config-center-3344的分支 <br>
+                    label: master <br>
+                    #读取cloud-config-center-3344的文件名 <br>
+                    name: config <br>
+                    #读取cloud-config-center-3344的环境 <br>
+                    profile: dev <br>
+                    #读取cloud-config-center-3344的地址 <br>
+                    uri: http://localhost:3344 <br>
+      
 ### 3355不用重启通过3344动态读取
-① 添加依赖 spring-boot-starter-actuator <br>
-② bootstrap.yml 添加management.endpoints.web.exposure.include: "*" <br>
-③ 在配置类上添加自动刷新注解@RefreshScope <br>
-④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令) <br>
+*① 添加依赖 spring-boot-starter-actuator <br>
+*② bootstrap.yml 添加management.endpoints.web.exposure.include: "*" <br>
+*③ 在配置类上添加自动刷新注解@RefreshScope <br>
+*④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令) <br>
 
 ## 使用spring cloud stream进行消息的发送
 spring cloud stream 暂时只支持rabbitMQ和kafka <br>
@@ -111,11 +111,11 @@ spring cloud stream 暂时只支持rabbitMQ和kafka <br>
 
 ### 创建发送消息
 application.yml -> spring.cloud.stream.bindings.output.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找) <br>
-①com.sherlock.springcloud.service.impl.IMessageProviderImpl 
+*①com.sherlock.springcloud.service.impl.IMessageProviderImpl 
 添加注解@EnableBinding(Source.class) //定义消息的推送 <br>
-②@Autowired
+*②@Autowired
 private MessageChannel output; //消息发送管道 <br>
-③output.send(MessageBuilder.withPayload(message).build());  //发送消息到MQ或者kafka
+*③output.send(MessageBuilder.withPayload(message).build());  //发送消息到MQ或者kafka
 
 ### 创建接收消息
 application.yml -> spring.cloud.stream.bindings.input.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找) <br>
