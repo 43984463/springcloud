@@ -51,14 +51,14 @@ hystrix 使用 <br>
 
 ## 使用hystrix进行服务熔断
     @HystrixCommand(
-            fallbackMethod = "paymentCircuitBreaker_fallback",  //熔断之后的兜底方法 <br>
-            commandProperties = { <br>
-                @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),// 是否开启断路器 <br>
-                @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),// 请求次数 <br>
-                @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),// 时间窗口期/时间范围 <br>
-                @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")// 失败率达到多少后跳闸 <br>
-             } <br>
-    ) <br>
+            fallbackMethod = "paymentCircuitBreaker_fallback",  //熔断之后的兜底方法
+            commandProperties = {
+                @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),// 是否开启断路器
+                @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),// 请求次数
+                @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),// 时间窗口期/时间范围
+                @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")// 失败率达到多少后跳闸
+             }
+    )
 此注解可以配置的属性参考com.netflix.hystrix.HystrixCommandProperties <br>
 
 ## 使用gateway进行网关(route,predicate,filter)
