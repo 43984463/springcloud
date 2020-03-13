@@ -45,7 +45,7 @@ hystrix 使用 <br>
 ③ 添加在 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")注解中的PaymentInfo_TimeOut_Global_Handler方法来作为默认的fallback方法. <br>
 
 ### 三、 在服务调用端的service实现里面的所有方法来实现容错
-在com.sherlock.springcloud.service.PaymentFeignHystrixService中添加实现类并在
+在com.sherlock.springcloud.service.PaymentFeignHystrixService中添加实现类并在 <br>
 @FeignClient(value = "cloud-provider-hystrix-payment", fallback = PaymentFeignFallBackServiceImpl.class)注解中将其配置为fallback方法。 <br>
 需要将Impl假如到spring容器中(添加@Component注解)，此时出错则调用PaymentFeignFallBackServiceImpl中对应的方法。
 
@@ -70,7 +70,7 @@ cloud-gateway-gateway9527/src/main/resources/application.yml <br>
 ### 使用注册bean的形式构建
 cloud-gateway-gateway9527 -> com.sherlock.springcloud.config.GatewayConfig 
 ### 使用配置文件进行动态路由
-application.yml -> spring.cloud.gateway.discovery.locator.enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由 <br>
+application.yml -> spring.cloud.gateway.discovery.locator.enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由 (可如下配置) <br>
 spring.cloud.gateway.routes[0].uri: lb:CLOUD-PROVIDER-PAYMENT
 ### 使用过滤器拦截请求
 使用实现了org.springframework.cloud.gateway.filter.GlobalFilter接口的组件 <br>
@@ -99,10 +99,10 @@ spring:
       uri: http://localhost:3344
 
 ### 3355不用重启通过3344动态读取
-① 添加依赖 spring-boot-starter-actuator
-② bootstrap.yml 添加management.endpoints.web.exposure.include: "*"
-③ 在配置类上添加自动刷新注解@RefreshScope
-④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令)
+① 添加依赖 spring-boot-starter-actuator <br>
+② bootstrap.yml 添加management.endpoints.web.exposure.include: "*" <br>
+③ 在配置类上添加自动刷新注解@RefreshScope <br>
+④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令) <br>
 
 ## 使用spring cloud stream进行消息的发送
 spring cloud stream 暂时只支持rabbitMQ和kafka <br>
@@ -110,20 +110,20 @@ spring cloud stream 暂时只支持rabbitMQ和kafka <br>
 但是不影响使用，找了方法没修改成功，暂时不影响。
 
 ### 创建发送消息
-application.yml -> spring.cloud.stream.bindings.output.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找)
+application.yml -> spring.cloud.stream.bindings.output.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找) <br>
 ①com.sherlock.springcloud.service.impl.IMessageProviderImpl 
-添加注解@EnableBinding(Source.class) //定义消息的推送
+添加注解@EnableBinding(Source.class) //定义消息的推送 <br>
 ②@Autowired
-private MessageChannel output; //消息发送管道
+private MessageChannel output; //消息发送管道 <br>
 ③output.send(MessageBuilder.withPayload(message).build());  //发送消息到MQ或者kafka
 
 ### 创建接收消息
-application.yml -> spring.cloud.stream.bindings.input.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找)
-com.sherlock.springcloud.component.ReceiveMessageListenerComponent 
-①添加注解@EnableBinding(Sink.class)并将此组件添加到spring容器中
+application.yml -> spring.cloud.stream.bindings.input.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找) <br>
+com.sherlock.springcloud.component.ReceiveMessageListenerComponent <br>
+①添加注解@EnableBinding(Sink.class)并将此组件添加到spring容器中 <br>
 ②
-**@StreamListener(Sink.INPUT)**
-     public void inputMessage(Message<String> message){
-         log.info("消费者01；port：" + port + ", message :" + message.getPayload());
+**@StreamListener(Sink.INPUT)** <br>
+     public void inputMessage(Message<String> message){ <br>
+         log.info("消费者01；port：" + port + ", message :" + message.getPayload()); <br>
      }
  
