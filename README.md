@@ -129,10 +129,10 @@ com.sherlock.springcloud.component.ReceiveMessageListenerComponent <br>
 
 ## 解决多个消息消费方重复消费问题(8802和8803消费来自8801的消息)
 在application.yml中添加group并命名相同，则为相同组，相同组消息的消费是竞争关系。 <br>
-application.yml -> spring.cloud.stream.bindings.input.group
+application.yml -> spring.cloud.stream.bindings.input.group <br>
 **添加组信息之后，假如消息消费方宕机，重启之后仍然可以消费宕机期间的消息，但是没有分组的不行**
 
-#Nacos
+## Nacos
 下载之后使用cmd命令启动nacos-server-1.2.0\nacos\bin\startup.cmd(Window环境) <br>
 访问 http://127.0.0.1:8848/nacos 查看控制台 <br>
 spring.cloud.nacos.discovery 可以配置的参数都在 com.alibaba.cloud.nacos.NacosDiscoveryProperties里面看
