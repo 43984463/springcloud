@@ -84,19 +84,19 @@ cloud-config-center-3344 -> com.sherlock.springcloud.ConfigCenterMain3344
 配置文件名称为bootstrap.yml
 
 ### 3355通过3344读取github上对应路径，版本上的某个文件的信息
-    spring: <br>
-        application: <br>
-                name: cloud-config-client <br>
-        cloud: <br>
-                config: <br>
-                    #读取cloud-config-center-3344的分支 <br>
-                    label: master <br>
-                    #读取cloud-config-center-3344的文件名 <br>
-                    name: config <br>
-                    #读取cloud-config-center-3344的环境 <br>
-                    profile: dev <br>
-                    #读取cloud-config-center-3344的地址 <br>
-                    uri: http://localhost:3344 <br>
+    spring:
+        application:
+                name: cloud-config-client
+        cloud:
+                config:
+                    #读取cloud-config-center-3344的分支
+                    label: master
+                    #读取cloud-config-center-3344的文件名
+                    name: config
+                    #读取cloud-config-center-3344的环境
+                    profile: dev
+                    #读取cloud-config-center-3344的地址
+                    uri: http://localhost:3344
       
 ### 3355不用重启通过3344动态读取
 *① 添加依赖 spring-boot-starter-actuator <br>
