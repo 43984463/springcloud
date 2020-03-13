@@ -74,3 +74,29 @@ spring.cloud.gateway.routes[0].uri: lb:CLOUD-PROVIDER-PAYMENT
 使用实现了org.springframework.cloud.gateway.filter.GlobalFilter接口的组件 <br>
 重写org.springframework.cloud.gateway.filter.GlobalFilter.filter方法来拦截或者过滤请求。
 
+## 使用config center读取github对应项目分支地址下的信息
+cloud-config-center-3344 -> com.sherlock.springcloud.ConfigCenterMain3344
+
+## 使用config client(3355)读取3344对应项目分支地址下的信息
+配置文件名称为bootstrap.yml
+
+### 3355通过3344读取github上对应路径，版本上的某个文件的信息
+spring:
+  application:
+    name: cloud-config-client
+  cloud:
+    config:
+      #读取cloud-config-center-3344的分支
+      label: master
+      #读取cloud-config-center-3344的文件名
+      name: config
+      #读取cloud-config-center-3344的环境
+      profile: dev
+      #读取cloud-config-center-3344的地址
+      uri: http://localhost:3344
+
+### 3355不用重启通过3344动态读取
+① 添加依赖 spring-boot-starter-actuator
+② bootstrap.yml 添加management.endpoints.web.exposure.include: "*"
+③ 在配置类上添加自动刷新注解@RefreshScope
+④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令)
