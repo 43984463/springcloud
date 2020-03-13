@@ -16,6 +16,17 @@ spring:
           # password:
       #读取分支
       label: master
+  rabbitmq:
+    host: 192.168.1.4
+    port: 5672
+    username: guest
+    password: guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "bus-refresh"
 
 eureka:
   client:

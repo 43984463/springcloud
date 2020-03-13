@@ -1,3 +1,5 @@
+springCloud尚硅谷学习视频，B站地址 https://www.bilibili.com/video/av93813318
+
 # 第一天记录
 1.在使用cloud-provider-payment8001访问com.sherlock.springcloud.controller.paymentController.create时，本身测试post接口是没有问题的，  <br>
 但是在使用cloud-consumer-order80远程调用访问时 <br>
@@ -74,7 +76,8 @@ spring.cloud.gateway.routes[0].uri: lb:CLOUD-PROVIDER-PAYMENT
 使用实现了org.springframework.cloud.gateway.filter.GlobalFilter接口的组件 <br>
 重写org.springframework.cloud.gateway.filter.GlobalFilter.filter方法来拦截或者过滤请求。
 
-## 使用config center读取github对应项目分支地址下的信息
+# 第五天记录
+## 使用config center读取github对应项目分支地址下的信息（config统一管理项目的配置文件）
 cloud-config-center-3344 -> com.sherlock.springcloud.ConfigCenterMain3344
 
 ## 使用config client(3355)读取3344对应项目分支地址下的信息
@@ -100,3 +103,27 @@ spring:
 ② bootstrap.yml 添加management.endpoints.web.exposure.include: "*"
 ③ 在配置类上添加自动刷新注解@RefreshScope
 ④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令)
+
+## 使用spring cloud stream进行消息的发送
+spring cloud stream 暂时只支持rabbitMQ和kafka <br>
+使用docker启动的rabbitMQ连接项目是报错 org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: connect
+但是不影响使用，找了方法没修改成功，暂时不影响。
+
+### 创建发送消息
+application.yml -> spring.cloud.stream.bindings.output.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找)
+①com.sherlock.springcloud.service.impl.IMessageProviderImpl 
+添加注解@EnableBinding(Source.class) //定义消息的推送
+②@Autowired
+private MessageChannel output; //消息发送管道
+③output.send(MessageBuilder.withPayload(message).build());  //发送消息到MQ或者kafka
+
+### 创建接收消息
+application.yml -> spring.cloud.stream.bindings.input.destination: studyExchange # 表示要使用的Exchange名称定义(接收的时候也通过这个名称进行查找)
+com.sherlock.springcloud.component.ReceiveMessageListenerComponent 
+①添加注解@EnableBinding(Sink.class)并将此组件添加到spring容器中
+②
+**@StreamListener(Sink.INPUT)**
+     public void inputMessage(Message<String> message){
+         log.info("消费者01；port：" + port + ", message :" + message.getPayload());
+     }
+ 
