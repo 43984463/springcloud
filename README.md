@@ -50,7 +50,7 @@ hystrix 使用 <br>
 需要将Impl假如到spring容器中(添加@Component注解)，此时出错则调用PaymentFeignFallBackServiceImpl中对应的方法。
 
 ## 使用hystrix进行服务熔断
-@HystrixCommand(
+    @HystrixCommand(
             fallbackMethod = "paymentCircuitBreaker_fallback",  //熔断之后的兜底方法 <br>
             commandProperties = { <br>
                 @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),// 是否开启断路器 <br>
@@ -86,17 +86,17 @@ cloud-config-center-3344 -> com.sherlock.springcloud.ConfigCenterMain3344
 ### 3355通过3344读取github上对应路径，版本上的某个文件的信息
     spring:
         application:
-                name: cloud-config-client
+             name: cloud-config-client
         cloud:
-                config:
-                    #读取cloud-config-center-3344的分支
-                    label: master
-                    #读取cloud-config-center-3344的文件名
-                    name: config
-                    #读取cloud-config-center-3344的环境
-                    profile: dev
-                    #读取cloud-config-center-3344的地址
-                    uri: http://localhost:3344
+             config:
+                #读取cloud-config-center-3344的分支
+                label: master
+                #读取cloud-config-center-3344的文件名
+                name: config
+                #读取cloud-config-center-3344的环境
+                profile: dev
+                #读取cloud-config-center-3344的地址
+                uri: http://localhost:3344
       
 ### 3355不用重启通过3344动态读取
 ① 添加依赖 spring-boot-starter-actuator <br>
@@ -122,8 +122,12 @@ application.yml -> spring.cloud.stream.bindings.input.destination: studyExchange
 com.sherlock.springcloud.component.ReceiveMessageListenerComponent <br>
 ①添加注解@EnableBinding(Sink.class)并将此组件添加到spring容器中 <br>
 ②
-**@StreamListener(Sink.INPUT)** <br>
+@StreamListener(Sink.INPUT) <br>
      public void inputMessage(Message<String> message){ <br>
          log.info("消费者01；port：" + port + ", message :" + message.getPayload()); <br>
      }
- 
+
+## 解决多个消息消费方重复消费问题(8802和8803消费来自8801的消息)
+在application.yml中添加group并命名相同，则为相同组，相同组消息的消费是竞争关系。 <br>
+application.yml -> spring.cloud.stream.bindings.input.group
+**添加组信息之后，假如消息消费方宕机，重启之后仍然可以消费宕机期间的消息，但是没有分组的不行**
