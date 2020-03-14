@@ -159,6 +159,7 @@ Description:
         "org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationAutoConfiguration" })
 public class EurekaClientAutoConfiguration{
 }
+```
 
-解决方法 <br>
+****解决方法****
 在application.yml中添加属性eureka.client.enabled: false即可
