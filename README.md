@@ -1,5 +1,16 @@
 springCloud尚硅谷学习视频，B站地址 https://www.bilibili.com/video/av93813318
 
+工具
+
+下载[MindManager 2020](http://dwnld.mindjet.com/stubs/Builds/MindManager2020/20_0_334/64Bit/MindManager%202020.msi)
+
+激活码
+```text
+2019: MP19-777-APE8-1162-BD8E
+
+2020: MP20-345-DP56-7778-919A
+```
+
 # 第一天记录
 1.在使用cloud-provider-payment8001访问com.sherlock.springcloud.controller.paymentController.create时，本身测试post接口是没有问题的，  <br>
 但是在使用cloud-consumer-order80远程调用访问时 <br>
@@ -50,7 +61,8 @@ hystrix 使用 <br>
 需要将Impl假如到spring容器中(添加@Component注解)，此时出错则调用PaymentFeignFallBackServiceImpl中对应的方法。
 
 ## 使用hystrix进行服务熔断
-    @HystrixCommand(
+```java
+@HystrixCommand(
             fallbackMethod = "paymentCircuitBreaker_fallback",  //熔断之后的兜底方法
             commandProperties = {
                 @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),// 是否开启断路器
@@ -59,6 +71,8 @@ hystrix 使用 <br>
                 @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")// 失败率达到多少后跳闸
              }
     )
+```
+
 此注解可以配置的属性参考com.netflix.hystrix.HystrixCommandProperties <br>
 
 ## 使用gateway进行网关(route,predicate,filter)
@@ -84,20 +98,22 @@ cloud-config-center-3344 -> com.sherlock.springcloud.ConfigCenterMain3344
 配置文件名称为bootstrap.yml
 
 ### 3355通过3344读取github上对应路径，版本上的某个文件的信息
-    spring:
-        application:
-             name: cloud-config-client
-        cloud:
-             config:
-                #读取cloud-config-center-3344的分支
-                label: master
-                #读取cloud-config-center-3344的文件名
-                name: config
-                #读取cloud-config-center-3344的环境
-                profile: dev
-                #读取cloud-config-center-3344的地址
-                uri: http://localhost:3344
-      
+```yaml
+spring:
+    application:
+         name: cloud-config-client
+    cloud:
+         config:
+            #读取cloud-config-center-3344的分支
+            label: master
+            #读取cloud-config-center-3344的文件名
+            name: config
+            #读取cloud-config-center-3344的环境
+            profile: dev
+            #读取cloud-config-center-3344的地址
+            uri: http://localhost:3344
+```
+
 ### 3355不用重启通过3344动态读取
 ① 添加依赖 spring-boot-starter-actuator <br>
 ② bootstrap.yml 添加management.endpoints.web.exposure.include: "*" <br>
@@ -132,18 +148,21 @@ com.sherlock.springcloud.component.ReceiveMessageListenerComponent <br>
 application.yml -> spring.cloud.stream.bindings.input.group <br>
 **添加组信息之后，假如消息消费方宕机，重启之后仍然可以消费宕机期间的消息，但是没有分组的不行**
 
-## Nacos
+## Nacos 
+**官网地址**： https://nacos.io/zh-cn/docs/cluster-mode-quick-start.html
 下载之后使用cmd命令启动nacos-server-1.2.0\nacos\bin\startup.cmd(Window环境) <br>
 访问 http://127.0.0.1:8848/nacos 查看控制台 <br>
 spring.cloud.nacos.discovery 可以配置的参数都在 com.alibaba.cloud.nacos.NacosDiscoveryProperties里面看
 
-错误描述 <br>
+**错误描述**
+
 Description:
 
     Field registration in org.springframework.cloud.client.serviceregistry.ServiceRegistryAutoConfiguration$ServiceRegistryEndpointConfiguration required a single bean, but 2 were found:
-	- nacosRegistration: defined by method 'nacosRegistration' in class path resource [com/alibaba/cloud/nacos/NacosDiscoveryAutoConfiguration.class]
-	- eurekaRegistration: defined in BeanDefinition defined in class path resource [org/springframework/cloud/netflix/eureka/EurekaClientAutoConfiguration$RefreshableEurekaClientConfiguration.class]
-参考的类
+    - nacosRegistration: defined by method 'nacosRegistration' in class path resource [com/alibaba/cloud/nacos/NacosDiscoveryAutoConfiguration.class]
+    - eurekaRegistration: defined in BeanDefinition defined in class path resource [org/springframework/cloud/netflix/eureka/EurekaClientAutoConfiguration$RefreshableEurekaClientConfiguration.class]
+**参考的类**
+
 ```java
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties
@@ -161,5 +180,16 @@ public class EurekaClientAutoConfiguration{
 }
 ```
 
-****解决方法****
-在application.yml中添加属性eureka.client.enabled: false即可
+**解决方法:** 
+在application.yml中添加属性eureka.client.enabled: false即可 <br>
+
+### Nacos Config
+在bootstrap.yml中配置之后，在Nacos注册中心添加配置。
+* Data ID为 ${spring.application.name}-${spring.profile.active}.${spring.cloud.nacos.config.file-extension} 需要完全按照这个格式。 <br>
+namespace > group > dataId
+
+### Nacos 内置数据库derby切换到mysql
+**①.在mysql中创建对应数据库**
+ Naocs文件夹下的nacos-server-1.2.0\nacos\conf\nacos-mysql.sql 来创建保存Nacos配置信息的数据库。 <br>
+**②.修改Nacos连接数据库的信息**
+Naocs文件夹下的nacos-server-1.2.0\nacos\conf\application.properties添加数据库连接信息。(参考nacos-server-1.2.0\nacos\conf\application.properties.example)
