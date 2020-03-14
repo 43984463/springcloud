@@ -136,3 +136,29 @@ application.yml -> spring.cloud.stream.bindings.input.group <br>
 下载之后使用cmd命令启动nacos-server-1.2.0\nacos\bin\startup.cmd(Window环境) <br>
 访问 http://127.0.0.1:8848/nacos 查看控制台 <br>
 spring.cloud.nacos.discovery 可以配置的参数都在 com.alibaba.cloud.nacos.NacosDiscoveryProperties里面看
+
+错误描述 <br>
+Description:
+
+    Field registration in org.springframework.cloud.client.serviceregistry.ServiceRegistryAutoConfiguration$ServiceRegistryEndpointConfiguration required a single bean, but 2 were found:
+	- nacosRegistration: defined by method 'nacosRegistration' in class path resource [com/alibaba/cloud/nacos/NacosDiscoveryAutoConfiguration.class]
+	- eurekaRegistration: defined in BeanDefinition defined in class path resource [org/springframework/cloud/netflix/eureka/EurekaClientAutoConfiguration$RefreshableEurekaClientConfiguration.class]
+参考的类
+```java
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties
+@ConditionalOnClass(EurekaClientConfig.class)
+@Import(DiscoveryClientOptionalArgsConfiguration.class)
+@ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
+@ConditionalOnDiscoveryEnabled
+@AutoConfigureBefore({ NoopDiscoveryClientAutoConfiguration.class,
+        CommonsClientAutoConfiguration.class, ServiceRegistryAutoConfiguration.class })
+@AutoConfigureAfter(name = {
+        "org.springframework.cloud.autoconfigure.RefreshAutoConfiguration",
+        "org.springframework.cloud.netflix.eureka.EurekaDiscoveryClientConfiguration",
+        "org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationAutoConfiguration" })
+public class EurekaClientAutoConfiguration{
+}
+
+解决方法 <br>
+在application.yml中添加属性eureka.client.enabled: false即可
