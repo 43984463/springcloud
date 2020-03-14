@@ -193,3 +193,7 @@ namespace > group > dataId
  Naocs文件夹下的nacos-server-1.2.0\nacos\conf\nacos-mysql.sql 来创建保存Nacos配置信息的数据库。 <br>
 **②.修改Nacos连接数据库的信息**
 Naocs文件夹下的nacos-server-1.2.0\nacos\conf\application.properties添加数据库连接信息。(参考nacos-server-1.2.0\nacos\conf\application.properties.example)
+
+##Sentinel
+**参考文档地址**
+https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
