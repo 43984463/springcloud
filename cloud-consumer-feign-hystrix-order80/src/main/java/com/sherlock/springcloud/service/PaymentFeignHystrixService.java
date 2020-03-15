@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @date 2020/3/11 19:04
  * @Description:
  */
-@Service
+
 /**
  * ①添加本接口的实现类并重写所以方法的fallback方法，并将其加入spring容器。
  * ②在@FeignClient注解中配置fallback（默认的fallback class）

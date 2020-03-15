@@ -34,8 +34,9 @@ spring:
 
 eureka:
   client:
-    #向eureka注册中心注册
+    # 表示是否从eureka服务器获得注册信息
     fetch-registry: true
+    # 向eureka注册中心注册
     register-with-eureka: true
     service-url:
       #eureka注册中心注册地址

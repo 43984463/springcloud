@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * ② 在需要进行服务降级的方法上添加 @HystrixCommand 注解（如果配置了属性则优先使用该属性里面的配置）
  * ③ 添加在 @DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")注解中的PaymentInfo_TimeOut_Global_Handler方法来作为默认的fallback方法。
  */
-@DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")
+//@DefaultProperties(defaultFallback = "PaymentInfo_TimeOut_Global_Handler")
 public class OrderController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class OrderController {
     /*@HystrixCommand(fallbackMethod = "PaymentInfo_TimeOut_Handler", commandProperties = {
             @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value = "1500")
     })*/
-    @HystrixCommand
+    //@HystrixCommand
     @GetMapping("/consumer/payment/hystrix/timeout/{id}")
     public String paymentInfo_TimeOut_OK(@PathVariable("id") Integer id){
         return paymentFeignHystrixService.paymentInfo_TimeOut_OK(id);
