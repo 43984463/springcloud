@@ -31,6 +31,8 @@ public class PaymentService {
      * 本注解@HystrixCommand表示服务降级容错，既可以方法服务提供端，也可以放在服务调用端，一般配置在服务调用端，使用时请 ++ fallBack Method；
      * 在服务端时需要配合主配置的@EnableCircuitBreaker注解，
      * 在调用端时请配合(feign consumer)主配置的@EnableHystrix注解，以及feign.hystrix.enabled: true使用
+     * @see com.netflix.hystrix.HystrixCommandProperties#default_executionTimeoutInMilliseconds 默认超时时间
+     *
      */
     @HystrixCommand(fallbackMethod = "PaymentInfo_TimeOut_Handler", commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")

@@ -75,7 +75,7 @@ hystrix 使用 <br>
     )
 ```
 
-此注解可以配置的属性参考com.netflix.hystrix.HystrixCommandProperties <br>
+**@HystrixCommand注解的commandProperties可以配置的属性参考com.netflix.hystrix.HystrixCommandProperties**
 
 ## 使用gateway进行网关(route,predicate,filter)
 ### 使用application.yml配置文件配置
@@ -197,6 +197,12 @@ namespace > group > dataId
 **②.修改Nacos连接数据库的信息**
 Naocs文件夹下的nacos-server-1.2.0\nacos\conf\application.properties添加数据库连接信息。(参考nacos-server-1.2.0\nacos\conf\application.properties.example)
 
-##Sentinel
+## Sentinel
 **参考文档地址**
 https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
+
+## Seata
+**github地址**
+https://github.com/seata/seata
+**参考文档地址**
+https://seata.io/zh-cn/
