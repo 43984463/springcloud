@@ -203,6 +203,6 @@ https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
 
 ## Seata
 **github地址**
-https://github.com/seata/seata
+https://github.com/seata/seata <br>
 **参考文档地址**
 https://seata.io/zh-cn/
