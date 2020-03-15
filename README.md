@@ -37,6 +37,8 @@ eureka.server.enable-self-preservation #Eureka是否开启自我保护机制 <br
 eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务的时间，默认毫秒 <br>
 
 # 第三天记录
+## 使用ribbon+openfeign实现服务的负载均衡
+**openfeign默认超时时间为1S**
 ① cloud-consumer-feign-order80#com.sherlock.springcloud.controller.OrderController#getPayment。 <br>
 ② com.sherlock.springcloud.service.PaymentFeignService.getPaymentById。 <br>
 ③ com.sherlock.springcloud.FeignOrder80 开启openFeign @EnableFeignClients。 <br>
@@ -44,7 +46,7 @@ eureka.server.eviction-interval-timer-in-ms #Eureka清理没有心跳的服务�
 
 
 # 第四天记录
-## 使用hystrix进行服务容错
+## 使用hystrix+feign进行服务容错
 ### 一、 某个特定方法的服务容错
 参考com.sherlock.springcloud.service.PaymentService.paymentInfo_TimeOut_OK或者 <br>
 com.sherlock.springcloud.controller.OrderController#paymentInfo_TimeOut_OK <br>
@@ -121,6 +123,7 @@ spring:
 ④ 运维在修改github信息之后发送post请求 curl -X POST "http://localhsot:3355/actuator/refresh" (需要下载curl命令) <br>
 
 ## 使用spring cloud stream进行消息的发送
+**(相当于JPA之于底层数据库框架)**
 spring cloud stream 暂时只支持rabbitMQ和kafka <br>
 使用docker启动的rabbitMQ连接项目是报错 org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: connect
 但是不影响使用，找了方法没修改成功，暂时不影响。
