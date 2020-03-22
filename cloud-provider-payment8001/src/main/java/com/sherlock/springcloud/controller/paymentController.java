@@ -94,4 +94,9 @@ public class paymentController {
         }
         return this.discoveryClient;
     }
+
+    @GetMapping("/payment/zipkin")
+    public String zipkinPayment() {
+        return "zipkin on port: " + port;
+    }
 }

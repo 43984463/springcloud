@@ -151,6 +151,9 @@ com.sherlock.springcloud.component.ReceiveMessageListenerComponent <br>
 application.yml -> spring.cloud.stream.bindings.input.group <br>
 **添加组信息之后，假如消息消费方宕机，重启之后仍然可以消费宕机期间的消息，但是没有分组的不行**
 
+## zipkin(进行微服务调用链路的监控,默认端口9411)
+http://dl.bintray.com/openzipkin/maven/io/zipkin/java/zipkin-server/ <br>
+
 ## Nacos 
 **官网地址**： https://nacos.io/zh-cn/docs/cluster-mode-quick-start.html
 下载之后使用cmd命令启动nacos-server-1.2.0\nacos\bin\startup.cmd(Window环境) <br>
@@ -198,6 +201,9 @@ namespace > group > dataId
 Naocs文件夹下的nacos-server-1.2.0\nacos\conf\application.properties添加数据库连接信息。(参考nacos-server-1.2.0\nacos\conf\application.properties.example)
 
 ## Sentinel
+```text
+QPS每秒查询率(Query Per Second) 
+```
 **参考文档地址**
 https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
 

@@ -12,6 +12,11 @@ spring:
     password: root
     druid:
       validation-query: SELECT 1 FROM DUAL  #测试连接 不配置则控制台会打印一个ERROR LOG
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1 #采样率值介于0-1之间，1表示全部采集
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -27,7 +32,8 @@ eureka:
     service-url:
       #eureka注册中心注册地址
       #可以只写1个注册中心的地址只要写的那个激活然后写的那个注册中心与其他注册中心集群并互相注册，其他未再次填写的注册中心仍然可以访问到该服务
-      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+      defaultZone: http://eureka7001.com:7001/eureka
+      # defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
   instance:
     # 在eureka注册中心显示的名称
     instance-id: payment8001

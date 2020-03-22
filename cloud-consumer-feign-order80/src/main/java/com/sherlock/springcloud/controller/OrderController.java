@@ -29,4 +29,12 @@ public class OrderController {
        return paymentFeignService.getPaymentById(id);
     }
 
+    /**
+     * http://localhost/consumer/payment/zipkin 用zipkin来查看调用链路
+     * @return
+     */
+    @GetMapping("/consumer/payment/zipkin")
+    public String zipkinPayment() {
+        return paymentFeignService.zipkinPayment();
+    }
 }
